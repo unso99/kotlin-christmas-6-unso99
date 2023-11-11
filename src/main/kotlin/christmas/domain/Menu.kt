@@ -36,6 +36,9 @@ fun getMenu(order: String): Map<String, Int> {
     for (menu in orders) {
         val splitMenu = menu.split("-")
         orderIsNotOnMenu(splitMenu[0])
+        orderNumberIsNotInt(splitMenu[1])
+        orderNumberIsZero(splitMenu[1].toInt())
+        orderDuplicated(orderList,splitMenu[0])
         orderList[splitMenu[0]] = splitMenu[1].toInt()
     }
 
@@ -54,6 +57,18 @@ fun orderOutOfForm(order: String) {
     require(form.matches(order)) { ErrorMenu.ERROR.message }
 }
 
-fun orderIsNotOnMenu(menu: String) {
-    require(Menu.entries.any { it.menuName == menu }) { ErrorMenu.ERROR.message }
+fun orderIsNotOnMenu(order: String) {
+    require(Menu.entries.any { it.menuName == order }) { ErrorMenu.ERROR.message }
+}
+
+fun orderNumberIsNotInt(number : String){
+    require(number.all { it.isDigit() }) { ErrorMenu.ERROR.message }
+}
+
+fun orderNumberIsZero(number : Int){
+    require(number == 0){ErrorMenu.ERROR.message}
+}
+
+fun orderDuplicated(existingOrder : Map<String,Int>, newOlder : String){
+    require(!existingOrder.containsKey(newOlder)){ErrorMenu.ERROR.message}
 }
