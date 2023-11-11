@@ -12,6 +12,8 @@ class Pos(private val orderList: Map<String, Int>) {
 
     }
 
+    fun getTotalPrice() : Int = calculateTotalPrice(orderList)
+
     private fun calculateTotalPrice(orderList: Map<String, Int>): Int {
         var totalPrice = 0
 
@@ -27,6 +29,7 @@ class Pos(private val orderList: Map<String, Int>) {
 
     private fun showTotalPrice(price: Int) {
         println("${"%,d".format(price)}원")
+        println()
     }
 
 
