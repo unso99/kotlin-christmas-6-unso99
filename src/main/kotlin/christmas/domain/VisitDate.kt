@@ -4,7 +4,7 @@ enum class VisitDate(val message: String) {
     ERROR("[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요.")
 }
 
-fun visitDateValidator(date: String): Int {
+fun validVisitDate(date: String): Int {
     visitDateEmpty(date)
     visitDateIsNotInt(date)
     visitDateIsNotInRange(date.toInt())

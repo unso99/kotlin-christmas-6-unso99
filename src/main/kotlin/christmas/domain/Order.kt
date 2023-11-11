@@ -42,13 +42,14 @@ fun getMenu(order: String): Map<String, Int> {
 
     for (menu in orders) {
         val splitMenu = menu.split("-")
-        println(splitMenu[0] +  splitMenu[1])
+        println("${splitMenu[0]} ${splitMenu[1]}개")
         orderIsNotOnMenu(splitMenu[0])
         orderNumberIsNotInt(splitMenu[1])
         orderNumberIsZero(splitMenu[1].toInt())
         orderDuplicated(orderList, splitMenu[0])
         orderList[splitMenu[0]] = splitMenu[1].toInt()
     }
+    println()
 
     orderOnlyBeverage(orderList)
     orderExceeded(orderList)
