@@ -21,3 +21,39 @@ enum class MenuBoard(val menu: List<Menu>) {
     BEVERAGE(listOf(Menu.ZERO_COKE, Menu.RED_WINE, Menu.CHAMPAGNE))
 }
 
+enum class ErrorMenu(val message: String) {
+    ERROR("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.")
+}
+
+// validator
+
+fun getMenu(order: String): Map<String, Int> {
+    orderEmpty(order)
+    orderOutOfForm(order)
+    val orders = order.split(",")
+    val orderList = mutableMapOf<String, Int>()
+
+    for (menu in orders) {
+        val splitMenu = menu.split("-")
+        orderIsNotOnMenu(splitMenu[0])
+        orderList[splitMenu[0]] = splitMenu[1].toInt()
+    }
+
+    return orderList
+}
+
+
+//입력이 공백
+fun orderEmpty(order: String) {
+    require(order.isNotEmpty() && order.isNotBlank()) { ErrorMenu.ERROR.message }
+}
+
+//메뉴형식
+fun orderOutOfForm(order: String) {
+    val form = Regex("[^,]+-\\d+(,[^,]+-\\d+)*")
+    require(form.matches(order)) { ErrorMenu.ERROR.message }
+}
+
+fun orderIsNotOnMenu(menu: String) {
+    require(Menu.entries.any { it.menuName == menu }) { ErrorMenu.ERROR.message }
+}
