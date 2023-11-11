@@ -37,6 +37,16 @@ class Pos(private val orderList: Map<String, Int>) {
         println()
     }
 
+    fun showExpectedPrice(){
+        val totalPrice = calculateTotalPrice(orderList)
+        val discountPrice = calculateTotalEventDiscount()
+        val expectedPrice = totalPrice - discountPrice + 25000
+
+        println("${"%,d".format(expectedPrice)}원")
+        println()
+
+    }
+
     private fun countMenuType() {
         for (order in orderList) {
             val menu = Menu.entries.find { it.menuName == order.key }
