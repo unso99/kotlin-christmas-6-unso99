@@ -20,7 +20,9 @@ class Pos(private val orderList: Map<String, Int>) {
 
     }
 
-    fun getTotalPrice(): Int = calculateTotalPrice(orderList)
+    fun getTotalPrice() = calculateTotalPrice(orderList)
+
+    fun getEventDiscount() = calculateTotalEventDiscount()
 
     fun showEventDiscount(discount: List<Discount>) {
         val eventDiscount = calculateEventDiscount(discount)
@@ -31,13 +33,13 @@ class Pos(private val orderList: Map<String, Int>) {
         println()
     }
 
-    fun showTotalEventDiscount(){
+    fun showTotalEventDiscount() {
         val totalDiscount = calculateTotalEventDiscount()
         println("-${"%,d".format(totalDiscount)}원")
         println()
     }
 
-    fun showExpectedPrice(){
+    fun showExpectedPrice() {
         val totalPrice = calculateTotalPrice(orderList)
         val discountPrice = calculateTotalEventDiscount()
         val expectedPrice = totalPrice - discountPrice + 25000

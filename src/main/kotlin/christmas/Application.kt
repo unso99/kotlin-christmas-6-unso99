@@ -1,18 +1,40 @@
 package christmas
 
 import camp.nextstep.edu.missionutils.Console
-import christmas.domain.visitDateEmpty
-import christmas.domain.visitDateIsNotInRange
-import christmas.domain.visitDateIsNotInt
+import christmas.domain.*
 
 fun main() {
+
     try {
         printStartMessage()
         printVisitDate()
         val input = inputMessage().trim()
-        visitDateEmpty(input)
-        visitDateIsNotInt(input)
-        visitDateIsNotInRange(input.toInt())
+        val visitDate = validVisitDate(input)
+        printOrder()
+        val input2 = inputMessage().trim()
+        printEventPreView(visitDate)
+        println()
+        printOrderMenu()
+        val orderList = getMenu(input2)
+        printTotalPriceBeforeDiscount()
+        val pos = Pos(orderList)
+        printGiftMenu()
+        val gift = Gift(pos.getTotalPrice())
+        printBenefitDetails()
+        val eventCalendar = EventCalendar(visitDate,gift.getHasGift())
+        pos.showEventDiscount(eventCalendar.getDiscountInfo())
+        printTotalBenefit()
+        pos.showTotalEventDiscount()
+        printExpectedPrice()
+        pos.showExpectedPrice()
+        printEventBadge()
+        val badge = getBadge(pos.getEventDiscount())
+        println(badge.badgeName)
+
+
+
+
+
     } catch (e: IllegalArgumentException) {
         println(e.message)
         main()
@@ -34,8 +56,8 @@ fun printOrder() {
     println("주문하실 메뉴를 메뉴와 개수를 알려 주세요. (e.g. 해산물파스타-2,레드와인-1,초코케이크-1) 티본스테이크-1,바비큐립-1,초코케이크-2,제로콜라-1")
 }
 
-fun printEventPreView(visitDate: String) {
-    println("${visitDate}에 우테코 식당에서 받을 이벤트 혜택 미리 보기!")
+fun printEventPreView(visitDate: Int) {
+    println("12월 ${visitDate}일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!")
 }
 
 fun printOrderMenu() {
