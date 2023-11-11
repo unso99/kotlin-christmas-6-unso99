@@ -1,6 +1,9 @@
 package christmas
 
 import camp.nextstep.edu.missionutils.Console
+import christmas.domain.visitDateEmpty
+import christmas.domain.visitDateIsNotInRange
+import christmas.domain.visitDateIsNotInt
 
 fun main() {
     try {
@@ -63,21 +66,6 @@ fun printEventBadge() {
     println("<12월 이벤트 배지>")
 }
 
-//validator
-// 방문 날짜가 정수가 아닌경우
-fun visitDateIsNotInt(date: String) {
-    require(date.all { it.isDigit() }) { "[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요." }
-}
-
-// 방문 날짜가 공백인 경우
-fun visitDateEmpty(date: String) {
-    require(date.isNotEmpty() && date.isNotBlank()) { "[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요." }
-}
-
-// 방문 날짜가 1 이상 31이하의 숫자가 아닌 경우
-fun visitDateIsNotInRange(date: Int) {
-    require(date in 1..31) { "[ERROR] 유효하지 않은 날짜입니다. 다시 입력해 주세요." }
-}
 
 
 
