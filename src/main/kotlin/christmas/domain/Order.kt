@@ -100,6 +100,7 @@ private fun checkOrderMenu(
         orderDuplicated(orderList, menuName)
         orderList[menuName] = menuCount.toInt()
     }
+    println()
 }
 
 private fun checkOrderList(orderList: MutableMap<String, Int>) {

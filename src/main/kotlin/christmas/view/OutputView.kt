@@ -28,7 +28,7 @@ class OutputView {
 
     fun printEventPreView(visitDate: Int) {
         println(String.format(OutputMessage.EVENT_PREVIEW.message, visitDate))
-        println()
+        printEmpty()
     }
 
     fun printOrderMenu() {
@@ -84,7 +84,6 @@ class OutputView {
             return
         }
         printPrice(price)
-        printEmpty()
     }
 
     fun printPrice(price: Int) {
