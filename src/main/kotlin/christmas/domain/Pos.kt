@@ -2,6 +2,7 @@ package christmas.domain
 
 import christmas.Constant.ZERO
 import christmas.domain.DiscountType.*
+import christmas.view.OutputView
 
 class Pos(private val orderList: Map<String, Int>) {
     private val orderMenuTypes = mutableMapOf(
@@ -12,6 +13,8 @@ class Pos(private val orderList: Map<String, Int>) {
     )
 
     private val discountInfo = mutableMapOf<String, Int>()
+
+    private val outputView = OutputView()
 
     init {
         countMenuType()
@@ -27,24 +30,25 @@ class Pos(private val orderList: Map<String, Int>) {
         val eventDiscount = calculateEventDiscount(discount)
 
         eventDiscount.forEach {
-            println("${it.key}-${"%,d".format(it.value)}원")
+            outputView.printEventDiscount(it.key, it.value)
         }
-        println()
+        if (eventDiscount.isEmpty()) outputView.printNone()
     }
 
     fun showTotalEventDiscount() {
         val totalDiscount = calculateTotalEventDiscount()
-        println("-${"%,d".format(totalDiscount)}원")
-        println()
+        outputView.printTotalEventDiscount(totalDiscount)
     }
 
-    fun showExpectedPrice() {
+    fun showExpectedPrice(hasGift: Boolean) {
         val totalPrice = calculateTotalPrice(orderList)
         val discountPrice = calculateTotalEventDiscount()
-        val expectedPrice = (totalPrice - discountPrice) + GIFT.discountPrice
+        var expectedPrice = (totalPrice - discountPrice)
+        if (hasGift) {
+            expectedPrice += GIFT.discountPrice
+        }
 
-        println("${"%,d".format(expectedPrice)}원")
-        println()
+        outputView.printPrice(expectedPrice)
 
     }
 
@@ -71,44 +75,42 @@ class Pos(private val orderList: Map<String, Int>) {
     }
 
     private fun showTotalPrice(price: Int) {
-        println("${"%,d".format(price)}원")
-        println()
+        outputView.printPrice(price)
     }
 
     private fun calculateEventDiscount(discount: List<Discount>): Map<String, Int> {
         discount.forEach {
             when (it.type) {
-                CHRISTMAS -> {
-                    discountInfo.compute(it.type.event) { _, price -> (price ?: ZERO) + it.discountPrice }
-                }
-
-                WEEKDAY -> {
-                    val dessertCount = orderMenuTypes[MenuType.DESSERT]!!
-                    discountInfo.compute(it.type.event) { _, price ->
-                        (price ?: ZERO) + it.discountPrice * dessertCount
-                    }
-                }
-
-                WEEKEND -> {
-                    val mainCount = orderMenuTypes[MenuType.MAIN]!!
-                    discountInfo.compute(it.type.event) { _, price ->
-                        (price ?: ZERO) + it.discountPrice * mainCount
-                    }
-                }
-
-                SPECIAL -> {
-                    discountInfo.compute(it.type.event) { _, price -> (price ?: ZERO) + it.discountPrice }
-                }
-
-                GIFT -> {
-                    discountInfo.compute(it.type.event) { _, price -> (price ?: ZERO) + it.discountPrice }
-                }
+                CHRISTMAS -> { updateDiscount(it) }
+                WEEKDAY -> { updateWeekDayDiscount(it) }
+                WEEKEND -> { updateWeekendDiscount(it) }
+                SPECIAL -> { updateDiscount(it) }
+                GIFT -> { updateDiscount(it) }
             }
         }
 
-        return discountInfo
-
+        return discountInfo.filter { it.value != ZERO }
     }
+
+
+    private fun updateDiscount(it: Discount) {
+        discountInfo.compute(it.type.event) { _, price -> (price ?: ZERO) + it.discountPrice }
+    }
+
+    private fun updateWeekDayDiscount(it: Discount) {
+        val dessertCount = orderMenuTypes[MenuType.DESSERT]!!
+        discountInfo.compute(it.type.event) { _, price ->
+            (price ?: ZERO) + it.discountPrice * dessertCount
+        }
+    }
+
+    private fun updateWeekendDiscount(it: Discount) {
+        val mainCount = orderMenuTypes[MenuType.MAIN]!!
+        discountInfo.compute(it.type.event) { _, price ->
+            (price ?: ZERO) + it.discountPrice * mainCount
+        }
+    }
+
 
     private fun calculateTotalEventDiscount(): Int {
         var totalPrice = ZERO

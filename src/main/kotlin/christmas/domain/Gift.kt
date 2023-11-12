@@ -16,11 +16,9 @@ class Gift(price: Int) {
         if (price >= GIFT_THRESHOLD) {
             hasGift = true
             outputView.printGift()
-            outputView.printEmpty()
             return
         }
         outputView.printNone()
-        outputView.printEmpty()
     }
 
     companion object {

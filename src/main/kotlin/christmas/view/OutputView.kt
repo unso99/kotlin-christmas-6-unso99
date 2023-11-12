@@ -14,6 +14,9 @@ enum class OutputMessage(val message: String) {
     TOTAL_BENEFIT("<총혜택 금액>"),
     EXPECTED_PRICE("<할인 후 예상 결제 금액>"),
     EVENT_BADGE("<12월 이벤트 배지>"),
+    EVENT_DISCOUNT("%s-%,d원"),
+    MINUS_PRICE("-%,d원"),
+    PRICE("%,d원"),
 
 }
 
@@ -62,14 +65,35 @@ class OutputView {
 
     fun printNone() {
         println(NONE)
-    }
-
-    fun printEmpty() {
-        println()
+        printEmpty()
     }
 
     fun printMenu(name: String, count: String) {
         println(String.format(OutputMessage.MENU_ITEM.message, name, count))
+    }
+
+    fun printEventDiscount(message: String, price: Int) {
+        println(String.format(OutputMessage.EVENT_DISCOUNT.message, message, price))
+        printEmpty()
+    }
+
+    fun printTotalEventDiscount(price: Int) {
+        if (price != 0) {
+            println(String.format(OutputMessage.MINUS_PRICE.message, price))
+            printEmpty()
+            return
+        }
+        printPrice(price)
+        printEmpty()
+    }
+
+    fun printPrice(price: Int) {
+        println(String.format(OutputMessage.PRICE.message, price))
+        printEmpty()
+    }
+
+    private fun printEmpty() {
+        println()
     }
 
 
