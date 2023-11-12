@@ -4,10 +4,10 @@ import christmas.domain.DiscountType.*
 
 class Pos(private val orderList: Map<String, Int>) {
     private val orderMenuTypes = mutableMapOf(
-        MenuType.APPETIZER to 0,
-        MenuType.MAIN to 0,
-        MenuType.DESSERT to 0,
-        MenuType.BEVERAGE to 0
+        MenuType.APPETIZER to INIT_VALUE,
+        MenuType.MAIN to INIT_VALUE,
+        MenuType.DESSERT to INIT_VALUE,
+        MenuType.BEVERAGE to INIT_VALUE
     )
 
     private val discountInfo = mutableMapOf<String, Int>()
@@ -42,7 +42,7 @@ class Pos(private val orderList: Map<String, Int>) {
     fun showExpectedPrice() {
         val totalPrice = calculateTotalPrice(orderList)
         val discountPrice = calculateTotalEventDiscount()
-        val expectedPrice = totalPrice - discountPrice + 25000
+        val expectedPrice = (totalPrice - discountPrice) + GIFT.discountPrice
 
         println("${"%,d".format(expectedPrice)}원")
         println()
@@ -53,13 +53,13 @@ class Pos(private val orderList: Map<String, Int>) {
         for (order in orderList) {
             val menu = Menu.entries.find { it.menuName == order.key }
             menu?.let {
-                orderMenuTypes.compute(it.type) { _, count -> (count ?: 0) + order.value }
+                orderMenuTypes.compute(it.type) { _, count -> (count ?: INIT_VALUE) + order.value }
             }
         }
     }
 
     private fun calculateTotalPrice(orderList: Map<String, Int>): Int {
-        var totalPrice = 0
+        var totalPrice = INIT_VALUE
 
         for (order in orderList) {
             val menu = Menu.entries.find { it.menuName == order.key }
@@ -80,25 +80,29 @@ class Pos(private val orderList: Map<String, Int>) {
         discount.forEach {
             when (it.type) {
                 CHRISTMAS -> {
-                    discountInfo.compute(it.type.event) { _, price -> (price ?: 0) + it.discountPrice }
+                    discountInfo.compute(it.type.event) { _, price -> (price ?: INIT_VALUE) + it.discountPrice }
                 }
 
                 WEEKDAY -> {
                     val dessertCount = orderMenuTypes[MenuType.DESSERT]!!
-                    discountInfo.compute(it.type.event) { _, price -> (price ?: 0) + it.discountPrice * dessertCount }
+                    discountInfo.compute(it.type.event) { _, price ->
+                        (price ?: INIT_VALUE) + it.discountPrice * dessertCount
+                    }
                 }
 
                 WEEKEND -> {
                     val mainCount = orderMenuTypes[MenuType.MAIN]!!
-                    discountInfo.compute(it.type.event) { _, price -> (price ?: 0) + it.discountPrice * mainCount }
+                    discountInfo.compute(it.type.event) { _, price ->
+                        (price ?: INIT_VALUE) + it.discountPrice * mainCount
+                    }
                 }
 
                 SPECIAL -> {
-                    discountInfo.compute(it.type.event) { _, price -> (price ?: 0) + it.discountPrice }
+                    discountInfo.compute(it.type.event) { _, price -> (price ?: INIT_VALUE) + it.discountPrice }
                 }
 
                 GIFT -> {
-                    discountInfo.compute(it.type.event) { _, price -> (price ?: 0) + it.discountPrice }
+                    discountInfo.compute(it.type.event) { _, price -> (price ?: INIT_VALUE) + it.discountPrice }
                 }
             }
         }
@@ -108,12 +112,16 @@ class Pos(private val orderList: Map<String, Int>) {
     }
 
     private fun calculateTotalEventDiscount(): Int {
-        var totalPrice = 0
+        var totalPrice = INIT_VALUE
         discountInfo.forEach {
             totalPrice += it.value
         }
 
         return totalPrice
+    }
+
+    companion object {
+        const val INIT_VALUE = 0
     }
 
 
