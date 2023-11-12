@@ -1,5 +1,12 @@
 package christmas.domain
 
+import christmas.Constant.MAX_ORDER_SIZE
+import christmas.Constant.MENU_DELIMITERS
+import christmas.Constant.ORDER_DELIMITERS
+import christmas.Constant.ORDER_FORM
+import christmas.Constant.ZERO
+import christmas.view.OutputView
+
 enum class Menu(val menuName: String, val price: Int, val type: MenuType) {
     MUSHROOM_SOUP("양송이 수프", 6_000, MenuType.APPETIZER), TAPAS("타파스", 5_500, MenuType.APPETIZER), CAESAR_SALAD(
         "시저샐러드",
@@ -35,37 +42,17 @@ enum class ErrorMenu(val message: String) {
 // validator
 
 fun getMenu(order: String): Map<String, Int> {
-    orderEmpty(order)
-    orderOutOfForm(order)
-    val orders = order.split(",")
+    checkOrder(order)
+    val orders = order.split(ORDER_DELIMITERS)
     val orderList = mutableMapOf<String, Int>()
 
-    for (menu in orders) {
-        val splitMenu = menu.split("-")
-        println("${splitMenu[0]} ${splitMenu[1]}개")
-        orderIsNotOnMenu(splitMenu[0])
-        orderNumberIsNotInt(splitMenu[1])
-        orderNumberIsZero(splitMenu[1].toInt())
-        orderDuplicated(orderList, splitMenu[0])
-        orderList[splitMenu[0]] = splitMenu[1].toInt()
-    }
-    println()
+    checkOrderMenu(orders, orderList)
 
-    orderOnlyBeverage(orderList)
-    orderExceeded(orderList)
+    checkOrderList(orderList)
 
     return orderList
 }
 
-
-fun orderEmpty(order: String) {
-    require(order.isNotEmpty() && order.isNotBlank()) { ErrorMenu.ORDER.message }
-}
-
-fun orderOutOfForm(order: String) {
-    val form = Regex("[^,]+-\\d+(,[^,]+-\\d+)*")
-    require(form.matches(order)) { ErrorMenu.ORDER.message }
-}
 
 fun orderIsNotOnMenu(order: String) {
     require(Menu.entries.any { it.menuName == order }) { ErrorMenu.ORDER.message }
@@ -76,15 +63,52 @@ fun orderNumberIsNotInt(number: String) {
 }
 
 fun orderNumberIsZero(number: Int) {
-    require(number != 0) { ErrorMenu.ORDER.message }
+    require(number != ZERO) { ErrorMenu.ORDER.message }
 }
 
 fun orderDuplicated(existingOrder: Map<String, Int>, newOlder: String) {
     require(!existingOrder.containsKey(newOlder)) { ErrorMenu.ORDER.message }
 }
 
+private fun checkOrder(order: String) {
+    orderEmpty(order)
+    orderOutOfForm(order)
+}
 
-fun orderOnlyBeverage(orderList: Map<String, Int>) {
+private fun orderOutOfForm(order: String) {
+    val form = Regex(ORDER_FORM)
+    require(form.matches(order)) { ErrorMenu.ORDER.message }
+}
+
+private fun orderEmpty(order: String) {
+    require(order.isNotEmpty() && order.isNotBlank()) { ErrorMenu.ORDER.message }
+}
+
+
+private fun checkOrderMenu(
+    orders: List<String>,
+    orderList: MutableMap<String, Int>
+) {
+    for (menu in orders) {
+        val splitMenu = menu.split(MENU_DELIMITERS)
+        val menuName = splitMenu[0]
+        val menuCount = splitMenu[1]
+        OutputView().printMenu(menuName, menuCount)
+        orderIsNotOnMenu(menuName)
+        orderNumberIsNotInt(menuCount)
+        orderNumberIsZero(menuCount.toInt())
+        orderDuplicated(orderList, menuName)
+        orderList[menuName] = menuCount.toInt()
+    }
+}
+
+private fun checkOrderList(orderList: MutableMap<String, Int>) {
+    orderOnlyBeverage(orderList)
+    orderExceeded(orderList)
+}
+
+
+private fun orderOnlyBeverage(orderList: Map<String, Int>) {
     val menuTypes = mutableSetOf<MenuType>()
 
     for (order in orderList) {
@@ -97,13 +121,16 @@ fun orderOnlyBeverage(orderList: Map<String, Int>) {
     require(!menuTypes.all { it == MenuType.BEVERAGE }) { ErrorMenu.ONLY_BEVERAGE.message }
 }
 
-fun orderExceeded(orderList: Map<String, Int>) {
-    var count = 0
+private fun orderExceeded(orderList: Map<String, Int>) {
+    var count = ZERO
 
     for (order in orderList) {
         count += order.value
     }
 
-    require(count <= 20) { ErrorMenu.MAX_ORDER.message }
+    require(count <= MAX_ORDER_SIZE) { ErrorMenu.MAX_ORDER.message }
 
 }
+
+
+

@@ -1,7 +1,10 @@
 package christmas.domain
 
+import christmas.view.OutputView
+
 class Gift(price: Int) {
     private var hasGift = false
+    private val outputView = OutputView()
 
     init {
         checkGift(price)
@@ -12,18 +15,15 @@ class Gift(price: Int) {
     private fun checkGift(price: Int) {
         if (price >= GIFT_THRESHOLD) {
             hasGift = true
-            println(GIFT)
-            println()
+            outputView.printGift()
+            outputView.printEmpty()
             return
         }
-
-        println(NONE)
-        println()
+        outputView.printNone()
+        outputView.printEmpty()
     }
 
     companion object {
         const val GIFT_THRESHOLD = 120_000
-        const val GIFT = "샴페인 1개"
-        const val NONE = "없음"
     }
 }

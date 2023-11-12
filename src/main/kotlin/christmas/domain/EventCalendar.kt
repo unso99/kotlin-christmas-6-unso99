@@ -28,28 +28,44 @@ class EventCalendar(private val date: Int, private val hasGift: Boolean) {
     fun getDiscountInfo(): List<Discount> {
         val discountList = mutableListOf<Discount>()
 
+        addChristmasDiscount(discountList)
+        addWeekdayDiscount(discountList)
+        addWeekendDiscount(discountList)
+        addSpecialDiscount(discountList)
+        addGiftDiscount(discountList)
+
+        return discountList
+    }
+
+    private fun addGiftDiscount(discountList: MutableList<Discount>) {
+        if (hasGift) {
+            discountList.add(giftDiscount)
+        }
+    }
+
+    private fun addSpecialDiscount(discountList: MutableList<Discount>) {
+        if (specialDiscountDays.contains(date)) {
+            discountList.add(specialDiscount)
+        }
+    }
+
+    private fun addWeekendDiscount(discountList: MutableList<Discount>) {
+        if (currentDate.dayOfWeek == DayOfWeek.FRIDAY || currentDate.dayOfWeek == DayOfWeek.SATURDAY) {
+            discountList.add(weekendDiscount)
+        }
+    }
+
+    private fun addWeekdayDiscount(discountList: MutableList<Discount>) {
+        if (currentDate.dayOfWeek <= DayOfWeek.THURSDAY || currentDate.dayOfWeek == DayOfWeek.SUNDAY) {
+            discountList.add(weekdayDiscount)
+        }
+    }
+
+    private fun addChristmasDiscount(discountList: MutableList<Discount>) {
         if (date <= CHRISTMAS_DAY) {
             val plusDiscount = (date - 1) * CHRISTMAS_DISCOUNT_INCREMENT
             discountList.add(christmasDiscount.copy(discountPrice = DiscountType.CHRISTMAS.discountPrice + plusDiscount))
         }
-
-        if (currentDate.dayOfWeek <= DayOfWeek.THURSDAY || currentDate.dayOfWeek == DayOfWeek.SUNDAY) {
-            discountList.add(weekdayDiscount)
-        }
-
-        if (currentDate.dayOfWeek == DayOfWeek.FRIDAY || currentDate.dayOfWeek == DayOfWeek.SATURDAY) {
-            discountList.add(weekendDiscount)
-        }
-
-        if (specialDiscountDays.contains(date)) {
-            discountList.add(specialDiscount)
-        }
-
-        if (hasGift) {
-            discountList.add(giftDiscount)
-        }
-
-        return discountList
     }
 
     companion object {
