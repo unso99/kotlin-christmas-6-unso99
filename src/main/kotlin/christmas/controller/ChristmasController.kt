@@ -22,7 +22,7 @@ class ChristmasController {
 
 
     private fun getVisitDate(): Int {
-        var input = ""
+        val input: String
         return try {
             input = inputView.readVisitDate()
             validVisitDate(input)
@@ -33,7 +33,7 @@ class ChristmasController {
     }
 
     private fun getOrderList(visitDate: Int): Map<String, Int> {
-        var order = ""
+        val order: String
         return try {
             order = inputView.readOrder()
             outputView.printEventPreView(visitDate)

@@ -19,5 +19,4 @@ object Constant {
 
     const val ORDER_DELIMITERS = ","
     const val MENU_DELIMITERS = "-"
-
 }

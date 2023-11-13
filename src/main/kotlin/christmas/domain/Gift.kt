@@ -10,7 +10,6 @@ class Gift(price: Int) {
         checkGift(price)
     }
 
-
     fun getHasGift() = hasGift
     private fun checkGift(price: Int) {
         if (price >= GIFT_THRESHOLD) {
@@ -19,6 +18,7 @@ class Gift(price: Int) {
             return
         }
         outputView.printNone()
+        println()
     }
 
     companion object {

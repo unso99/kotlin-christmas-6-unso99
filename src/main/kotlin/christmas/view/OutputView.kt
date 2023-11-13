@@ -66,7 +66,6 @@ class OutputView {
 
     fun printNone() {
         println(NONE)
-        printEmpty()
     }
 
     fun printMenu(name: String, count: String) {

@@ -19,6 +19,5 @@ class InputView {
         println(InputMessage.ORDER.message)
 
         return Console.readLine()
-
     }
 }

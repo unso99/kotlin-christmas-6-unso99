@@ -25,7 +25,7 @@ class Pos(private val orderList: Map<String, Int>) {
 
     fun getEventDiscount() = calculateTotalEventDiscount()
 
-    fun getExpectedPrice(hasGift: Boolean) : Int {
+    fun getExpectedPrice(hasGift: Boolean): Int {
         val totalPrice = calculateTotalPrice(orderList)
         val discountPrice = calculateTotalEventDiscount()
         var expectedPrice = (totalPrice - discountPrice)
@@ -41,8 +41,8 @@ class Pos(private val orderList: Map<String, Int>) {
         eventDiscount.forEach {
             outputView.printEventDiscount(it.key, it.value)
         }
-        println()
         if (eventDiscount.isEmpty()) outputView.printNone()
+        println()
     }
 
     fun showTotalEventDiscount() {

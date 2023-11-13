@@ -4,14 +4,9 @@ import christmas.domain.Discount
 import christmas.domain.DiscountType
 import christmas.domain.Menu
 import christmas.domain.Pos
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.io.ByteArrayOutputStream
-import java.io.PrintStream
-import kotlin.math.exp
 
 class PosTest {
     private lateinit var pos: Pos
@@ -52,13 +47,13 @@ class PosTest {
     }
 
     @Test
-    fun `주문 리스트의 총 예상 금액을 계산함`(){
+    fun `주문 리스트의 총 예상 금액을 계산함`() {
         val hasGift = true
         val result = pos.getExpectedPrice(hasGift)
 
         val expected = 135_954
 
-        assertEquals(expected,result)
+        assertEquals(expected, result)
 
     }
 
