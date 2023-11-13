@@ -14,14 +14,14 @@ fun validVisitDate(date: String): Int {
     return date.toInt()
 }
 
-fun visitDateEmpty(date: String) {
+private fun visitDateEmpty(date: String) {
     require(date.isNotEmpty() && date.isNotBlank()) { VisitDate.ERROR.message }
 }
 
-fun visitDateIsNotInt(date: String) {
+private fun visitDateIsNotInt(date: String) {
     require(date.all { it.isDigit() }) { VisitDate.ERROR.message }
 }
 
-fun visitDateIsNotInRange(date: Int) {
+private fun visitDateIsNotInRange(date: Int) {
     require(date in EVENT_START_DATE..EVENT_END_DATE) { VisitDate.ERROR.message }
 }
