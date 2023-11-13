@@ -2,6 +2,7 @@ package christmas.view
 
 import christmas.Constant.GIFT
 import christmas.Constant.NONE
+import christmas.domain.Badge
 
 enum class OutputMessage(val message: String) {
     START("안녕하세요! 우테코 식당 12월 이벤트 플래너입니다."),
@@ -89,6 +90,10 @@ class OutputView {
     fun printPrice(price: Int) {
         println(String.format(OutputMessage.PRICE.message, price))
         printEmpty()
+    }
+
+    fun printBadge(badge: Badge){
+        println(badge.badgeName)
     }
 
     private fun printEmpty() {

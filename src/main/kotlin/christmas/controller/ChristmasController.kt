@@ -80,6 +80,6 @@ class ChristmasController {
     private fun showBadge(pos: Pos) {
         outputView.printEventBadge()
         val badge = getBadge(pos.getEventDiscount())
-        println(badge.badgeName)
+        outputView.printBadge(badge)
     }
 }
