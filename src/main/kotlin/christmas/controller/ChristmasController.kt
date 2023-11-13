@@ -74,7 +74,9 @@ class ChristmasController {
 
     private fun showExpectedPrice(pos: Pos, gift: Gift) {
         outputView.printExpectedPrice()
-        pos.showExpectedPrice(gift.getHasGift())
+        val expectedPrice = pos.getExpectedPrice(gift.getHasGift())
+
+        outputView.printPrice(expectedPrice)
     }
 
     private fun showBadge(pos: Pos) {

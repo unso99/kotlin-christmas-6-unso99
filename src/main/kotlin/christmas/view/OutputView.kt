@@ -75,7 +75,6 @@ class OutputView {
 
     fun printEventDiscount(message: String, price: Int) {
         println(String.format(OutputMessage.EVENT_DISCOUNT.message, message, price))
-        printEmpty()
     }
 
     fun printTotalEventDiscount(price: Int) {

@@ -19,12 +19,21 @@ class Pos(private val orderList: Map<String, Int>) {
     init {
         countMenuType()
         showTotalPrice(calculateTotalPrice(orderList))
-
     }
 
     fun getTotalPrice() = calculateTotalPrice(orderList)
 
     fun getEventDiscount() = calculateTotalEventDiscount()
+
+    fun getExpectedPrice(hasGift: Boolean) : Int {
+        val totalPrice = calculateTotalPrice(orderList)
+        val discountPrice = calculateTotalEventDiscount()
+        var expectedPrice = (totalPrice - discountPrice)
+        if (hasGift) {
+            expectedPrice += GIFT.discountPrice
+        }
+        return expectedPrice
+    }
 
     fun showEventDiscount(discount: List<Discount>) {
         val eventDiscount = calculateEventDiscount(discount)
@@ -32,24 +41,13 @@ class Pos(private val orderList: Map<String, Int>) {
         eventDiscount.forEach {
             outputView.printEventDiscount(it.key, it.value)
         }
+        println()
         if (eventDiscount.isEmpty()) outputView.printNone()
     }
 
     fun showTotalEventDiscount() {
         val totalDiscount = calculateTotalEventDiscount()
         outputView.printTotalEventDiscount(totalDiscount)
-    }
-
-    fun showExpectedPrice(hasGift: Boolean) {
-        val totalPrice = calculateTotalPrice(orderList)
-        val discountPrice = calculateTotalEventDiscount()
-        var expectedPrice = (totalPrice - discountPrice)
-        if (hasGift) {
-            expectedPrice += GIFT.discountPrice
-        }
-
-        outputView.printPrice(expectedPrice)
-
     }
 
     private fun countMenuType() {
