@@ -54,19 +54,19 @@ fun getMenu(order: String): Map<String, Int> {
 }
 
 
-fun orderIsNotOnMenu(order: String) {
+private fun orderIsNotOnMenu(order: String) {
     require(Menu.entries.any { it.menuName == order }) { ErrorMenu.ORDER.message }
 }
 
-fun orderNumberIsNotInt(number: String) {
+private fun orderNumberIsNotInt(number: String) {
     require(number.all { it.isDigit() }) { ErrorMenu.ORDER.message }
 }
 
-fun orderNumberIsZero(number: Int) {
+private fun orderNumberIsZero(number: Int) {
     require(number != ZERO) { ErrorMenu.ORDER.message }
 }
 
-fun orderDuplicated(existingOrder: Map<String, Int>, newOlder: String) {
+private fun orderDuplicated(existingOrder: Map<String, Int>, newOlder: String) {
     require(!existingOrder.containsKey(newOlder)) { ErrorMenu.ORDER.message }
 }
 
