@@ -8,7 +8,7 @@ enum class DiscountType(val event: String, val discountPrice: Int) {
         "특별 할인: ",
         1_000
     ),
-    GIFT("증정 이벤트: ", 25_000)
+    GIFT("증정 이벤트: ", Menu.CHAMPAGNE.price)
 }
 
 data class Discount(val discountPrice: Int, val type: DiscountType)
